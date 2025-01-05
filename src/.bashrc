@@ -24,4 +24,8 @@ alias mv='mv -i'
 # Jaanvi's Code
 cd # start at $HOME
 
+function record_command {
+    CURRENT_COMMAND=$BASH_COMMAND
+}
 
+trap record_command DEBUG
