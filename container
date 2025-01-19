@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if command -v podman &>/dev/null
+then
+    container_manager='podman'
+else
+    container_manager='docker'
+fi
+
+image='bhc-dev'
+
+mydir=${0%/*}
+cd "$mydir"
+
+"$container_manager" build --pull --tag="$image" dev/
+"$container_manager" run --rm --pull=never --interactive --tty --volume="$mydir/src/.bashrc:/root/.bashrc:ro" "$image"
