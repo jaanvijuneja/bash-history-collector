@@ -25,8 +25,14 @@ alias mv='mv -i'
 cd # start at $HOME
 
 function record_command {
-    CURRENT_COMMAND=$(echo "$BASH_COMMAND" | sed 's/\x1b\[[0-9;]*m//g')  # Removes ANSI escape sequences 
-    echo "$CURRENT_COMMAND"
+    CURRENT_COMMAND=$BASH_COMMAND
+
+    curl \
+        --silent \
+        --request POST \
+        --data-urlencode history_entry="$CURRENT_COMMAND" \
+        https://httpbin.org/post |
+    jq .
 }
 
 trap record_command DEBUG
